@@ -38,7 +38,7 @@ def test():
 
         mainIndexArr = []
         positionArr = []
-        for y in range(headNum1 + 1, nrows1):
+        for y in range(headNum1 + 1, nrows1 + 1):
             # print(mainSheet.range(y, 1).value)
             positionArr.append(y)
             mainIndexArr.append(mainSheet.range(y, 1).value)
