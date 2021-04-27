@@ -36,12 +36,12 @@ def getRawFileList(path):
 
 def start():
     global wb1, wb2, danwei
-    out_file_path = 'E:\\01--高星--\\01 工作文档\\03 超30天未报销事项\\20210310\\已合并\\固定资产合并后9.xlsx'
+    out_file_path = 'E:\\01--高星--\\01 工作文档\\03 超30天未报销事项\\20210310\\已合并\\固定资产合并后10.xlsx'
     # data_src_path = 'E:\\01--高星--\\01 工作文档\\03 超30天未报销事项\\20210310\\已接收\\'
-    data_src_path = 'C:\\Users\\Administrator\\Desktop\固定资产\\'
+    data_src_path = 'C:\\Users\\Administrator\\Desktop\\待处理标签\\合并前\\'
 
     open_path = 'E:\\01--高星--\\01 工作文档\\03 超30天未报销事项\\20210310\\已合并\\'
-    head_num = 3
+    head_num = 2
 
     files, names = getRawFileList(data_src_path)
     shutil.copyfile(files[0], out_file_path)
