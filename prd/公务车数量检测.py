@@ -25,19 +25,15 @@ import subprocess
 def start():
     global wb1,wb2,wb3,app,sheet3, xPositon, yPositon
     # 上个月数据
-    pre_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\work\\汇总\\2021年4月份瑞华集团公务车信息汇总表.xlsx'
+    pre_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年4月瑞华集团公务车信息汇总表.xlsx'
     # 这个月数据
-    now_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\work\\拆分\车辆信息管理拆分后.xlsx'
+    now_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年5月瑞华集团公务车信息汇总表.xlsx'
     # 输出数据
-    out_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\work\\汇总\\2021年5月份瑞华集团公务车信息汇总表.xlsx'
-    # 以此关键字划分文件
-    keywordList = ['使用单位', '二级类别']
+    out_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年4月和5月对比.xlsx'
     # 上个月汇总表合计一行的关键字标识
     preHuZongHejiKey = "合计"
     # 原始表的表头行数
     headNum = 2
-    # 汇总表标题
-    huizongTitle = "2021年5月瑞华集团公务车信息汇总表"
     # 单位 为了固定顺序而定义
     companyList = [
         '集团本部',
@@ -75,7 +71,18 @@ def start():
 
     ]
 
-
+    # 老资产编号列表
+    oldDuibiNumArr = []
+    # 新资产编号列表
+    newDuibiNumArr = []
+    # 资产编号关键字
+    zichanKeyWord = "资产编号"
+    # 监控变化的字段
+    jiankongKeyWordArr = ["使用单位","使用部门","二级类别"]
+    # 车辆类别字段
+    carTypeKeyWord = "二级类别"
+    # 变化检测后缀
+    jiankongEndStr = "是否变化"
 
 
     # 打开这两个表，再创建一个新表
@@ -90,87 +97,7 @@ def start():
 
         subTabNum = len(wb3.sheets)
 
-        print("该工作簿一共又" + str(subTabNum) + "个工作表")
-
-        # 拿到去重字段的数据
-        resArr = getSetData(wb2,keywordList,headNum)
-        print(resArr)
-
-        # 创建汇总表
-        huizong = wb3.sheets.add("汇总")
-        huizong.range(1,1).value = huizongTitle
-        huizong.range(2,1).value = "单位"
-        danweiDict = {}
-        typeDict = {}
-        maxRow = 0
-        maxCol = 0
-        # 生成单位字典{'瑞源'：{'row':2,'col':1},...}
-        for nrow in range(0,len(companyList)):
-            currentDanwei = companyList[nrow]
-            huizong.range(nrow + 3, 1).value = currentDanwei
-            danweiDict[currentDanwei] = {}
-            danweiDict[currentDanwei]['row'] = nrow + 3
-            danweiDict[currentDanwei]['col'] = 1
-            maxRow = nrow + 3
-        # 生成车辆类型字典{'救援车'：{'row':2,'col':1},...}
-        for ncol in range(0,len(typeList)):
-            currentType = typeList[ncol]
-            huizong.range(2,ncol + 2).value = currentType
-            typeDict[currentType] = {}
-            typeDict[currentType]['row'] = 2
-            typeDict[currentType]['col'] = ncol + 2
-            maxCol = ncol + 2
-
-        sumNumRes = {}
-
-        # 根据单位打开每个sheet，获取每个类型车辆的数量
-        for danwei in resArr[0]['dataArr']:
-            danwei = companyToSimple(danwei)
-            currentDanweiSheet = wb3.sheets[danwei]
-            xPositon = resArr[1]['xPositon']
-            yPositon = resArr[1]['yPositon']
-            info = currentDanweiSheet.used_range
-            nrows = info.last_cell.row
-            ncols = info.last_cell.column
-            sumNumRes[danwei] = {}
-            for type in resArr[1]['dataArr']:
-                sumNumRes[danwei][type] = 0
-            for row in range(headNum + 1,nrows + 1):
-                currentType = currentDanweiSheet.range(row,yPositon).value
-                sumNumRes[danwei][currentType] = sumNumRes[danwei][currentType] + 1
-
-        print(sumNumRes)
-
-        # 遍历单位写入汇总数据
-        for key,value in danweiDict.items():
-            for k,v in typeDict.items():
-                if key not in sumNumRes.keys():
-                    continue
-                if sumNumRes[key][k] != 0:
-                    huizong.range(danweiDict[key]['row'],typeDict[k]['col']).value = sumNumRes[key][k]
-
-        print("现汇总表的行数和列数",maxRow,maxCol)
-
-        huizong.range(2,maxCol + 1).value = "合计"
-        huizong.range(maxRow + 1,1).value = "合计"
-
-        for x in range(3, maxRow + 1):
-            sum = 0
-            for y in range(2,maxCol + 1):
-                value = huizong.range(x,y).value
-                if value == None:
-                    value = 0
-                sum = sum + value
-            huizong.range(x,maxCol + 1).value = sum
-
-        for y in range(2, maxCol + 2):
-            sum = 0
-            for x in range(3, maxRow + 1):
-                value = huizong.range(x, y).value
-                if value == None:
-                    value = 0
-                sum = sum + value
-            huizong.range(maxRow + 1,y).value = sum
+        print("对比结果工作簿一共有" + str(subTabNum) + "个工作表")
 
 
         # 读取上个月的表第一列 合计字段所在行
@@ -190,23 +117,176 @@ def start():
 
         print("上个月的合计字段所在行",preHejiRow)
 
-        # 把上个月的合计数据写入到现表的合计
-        huizong.range(maxRow + 3,1).value = "上月合计"
-        for i in range(2,8):
-            huizong.range(maxRow + 3,i).value = preHuizong.range(preHejiRow,i).value
+        huizong = wb3.sheets["汇总"]
+        info = huizong.used_range
+        maxRow = info.last_cell.row
+        maxCol = info.last_cell.column
 
-        huizong.range(headNum, maxCol + 3).value = "上月合计"
-        for i in range(headNum + 1,maxRow + 1):
+
+        # 把上个月的合计数据写入到现表的合计
+        huizong.range(maxRow + 1,1).value = "上月合计"
+        for i in range(2,8):
+            huizong.range(maxRow + 1,i).value = preHuizong.range(preHejiRow,i).value
+
+        huizong.range(headNum, maxCol + 1).value = "上月合计"
+        for i in range(headNum + 1,maxRow):
             nowValue = huizong.range(i,1).value
             preValueRow = getKeyRow(preHuizong,1,nowValue)
             if preValueRow == None:
                 continue
-            huizong.range(i,maxCol + 3).value = preHuizong.range(preValueRow,7).value
-
-
-
+            huizong.range(i,maxCol + 1).value = preHuizong.range(preValueRow,7).value
 
         print("===============汇总表已完成==================")
+
+        # 读取旧表
+        oldYuanshi = wb1.sheets["原始表"]
+        oldInfo = oldYuanshi.used_range
+        oldNrows = oldInfo.last_cell.row
+        oldNcols = oldInfo.last_cell.column
+        # 读取新表
+        newYuanshi = wb2.sheets["原始表"]
+        newInfo = newYuanshi.used_range
+        newNrows = newInfo.last_cell.row
+        newNcols = newInfo.last_cell.column
+
+        # 找出两个表指定字段的坐标
+        oldZichanKeyWordPos = getKeyPos(oldYuanshi,zichanKeyWord,headNum)
+        newZichanKeyWordPos = getKeyPos(newYuanshi,zichanKeyWord,headNum)
+
+        print("旧表y轴",oldZichanKeyWordPos['yPosition'])
+        print("新表y轴",newZichanKeyWordPos['yPosition'])
+
+        # 拿到旧表的资产编号列表
+        for i in range(headNum + 1,oldNrows + 1):
+            value = oldYuanshi.range(i,oldZichanKeyWordPos['yPosition']).value
+            oldDuibiNumArr.append(value)
+            print("旧表资产编号：",value)
+
+        # 拿到新表的资产编号列表
+        for i in range(headNum + 1,newNrows + 1):
+            value = newYuanshi.range(i,newZichanKeyWordPos['yPosition']).value
+            newDuibiNumArr.append(value)
+            print("新表资产编号：", value)
+        # 拿到新增资产，处置资产，无变化资产
+        addDuibiNumArr,remDuibiNumArr,joinDuibiNumArr = findJoinData(oldDuibiNumArr,newDuibiNumArr)
+        # 处置资产带行数
+        remZichanPos = getColValuePos(oldYuanshi,headNum,oldNrows,oldZichanKeyWordPos['yPosition'],remDuibiNumArr)
+        # 新增资产带行数
+        addZichanPos = getColValuePos(newYuanshi,headNum,newNrows,newZichanKeyWordPos['yPosition'],addDuibiNumArr)
+        # 无变化资产 旧表中的 带行数
+        oldJoinZichanPos = getColValuePos(oldYuanshi,headNum,oldNrows,oldZichanKeyWordPos['yPosition'],joinDuibiNumArr)
+        # 无变化资产 新表中的 带行数
+        addJoinZichanPos = getColValuePos(newYuanshi,headNum,newNrows,newZichanKeyWordPos['yPosition'],joinDuibiNumArr)
+
+        for key in oldJoinZichanPos:
+            print("资产编号",key)
+            print("无变化资产旧表编号行数",oldJoinZichanPos[key],"====","新   ",addJoinZichanPos[key])
+
+
+
+        # 新增这三张表
+        addSheet = wb3.sheets.add("新增车辆")
+        remSheet = wb3.sheets.add("移除车辆")
+        updateSheet = wb3.sheets.add("更新车辆")
+
+        for i in range(1,headNum + 1):
+            newYuanshi.api.Rows(i).Copy(addSheet.api.Rows(i))
+            newYuanshi.api.Rows(i).Copy(remSheet.api.Rows(i))
+            newYuanshi.api.Rows(i).Copy(updateSheet.api.Rows(i))
+
+
+        print("遍历写入新增车辆")
+        writeRows = headNum + 1
+        for i in addDuibiNumArr:
+            print("新增车辆", i)
+            hang = addZichanPos[i]
+            newYuanshi.api.Rows(hang).Copy(addSheet.api.Rows(writeRows))
+            writeRows = writeRows + 1
+
+        print("遍历写入移除车辆")
+        writeRows = headNum + 1
+        for i in remDuibiNumArr:
+            print("移除车辆",i)
+            hang = remZichanPos[i]
+            oldYuanshi.api.Rows(hang).Copy(remSheet.api.Rows(writeRows))
+            writeRows = writeRows + 1
+
+        print("遍历写入无变化车辆")
+        writeRows = headNum + 1
+        for i in joinDuibiNumArr:
+            print("无变化车辆", i)
+            hang = addJoinZichanPos[i]
+            newYuanshi.api.Rows(hang).Copy(updateSheet.api.Rows(writeRows))
+            writeRows = writeRows + 1
+
+        # 添加监控字段在后面
+        # 获取指定字段的坐标
+        # oldJiankongKeyPos = getKeyPosPro(oldYuanshi,jiankongKeyWordArr,headNum)
+
+        updateSheetInfo = updateSheet.used_range
+        updateSheetRows = updateSheetInfo.last_cell.row
+        updateSheetCols = updateSheetInfo.last_cell.column
+
+        addEndStrCount = 1
+        for i in jiankongKeyWordArr:
+            updateSheet.range(headNum,updateSheetCols + addEndStrCount).value = i + jiankongEndStr
+            addEndStrCount = addEndStrCount + 1
+
+        updateSheet.range(headNum,updateSheetCols + len(jiankongKeyWordArr) + 1).value = "变化详情"
+
+        for i in range(headNum + 1,updateSheetRows + 1):
+            # 拿到资产编号
+            zichanNum = updateSheet.range(i,newZichanKeyWordPos['yPosition']).value
+            print("新表的资产编号在第",i,"行",zichanNum)
+            oldZichanRows = oldJoinZichanPos[zichanNum]
+            print("旧表的资产编号在第",oldZichanRows,"行")
+
+            oldDict = {}
+            newDict = {}
+
+            # 遍历旧资产的列
+            for j in range(1,oldNcols + 1):
+                value = oldYuanshi.range(oldZichanRows,j).value
+                title = oldYuanshi.range(headNum,j).value
+                oldDict[title] = value
+                # print("旧表的资产编号在第", i, "行", zichanNum, "-----", "title", value)
+            # 遍历新资产的列
+            for j in range(1,newNcols + 1):
+                value = updateSheet.range(i,j).value
+                title = updateSheet.range(headNum,j).value
+                # print("新表的资产编号在第", i, "行", zichanNum, "-----", "title", value)
+                newDict[title] = value
+
+            # 初始化字段
+            strRes = ""
+            allEq = True
+            for index,jiankongKey in enumerate(jiankongKeyWordArr):
+
+                print("旧",oldDict)
+                print("新",newDict)
+
+
+
+                if oldDict[jiankongKey] == None:
+                    oldDict[jiankongKey] = ""
+                if newDict[jiankongKey] == None:
+                    newDict[jiankongKey] = ""
+
+
+                if oldDict[jiankongKey] != newDict[jiankongKey]:
+                    updateSheet.range(i,updateSheetCols + index + 1).value = "是"
+                    strRes = strRes + jiankongKey +'：原值为"' + oldDict[jiankongKey] + '"，现值为"' + newDict[jiankongKey] + ';\n'
+                    allEq = False
+                else:
+                    updateSheet.range(i, updateSheetCols + index + 1).value = "否"
+                    pass
+
+            if allEq:
+                updateSheet.range(i, updateSheetCols + len(jiankongKeyWordArr) + 1).value = "无变化"
+                pass
+            else:
+                updateSheet.range(i, updateSheetCols + len(jiankongKeyWordArr) + 1).value = strRes
+
 
         # 获取对比信息
         """
@@ -219,10 +299,6 @@ def start():
 
 
 
-
-
-        # wb1.save()
-        # wb2.save()
         wb3.save()
         wb1.close()
         wb2.close()
@@ -234,11 +310,8 @@ def start():
         print(result)
         print('str(e):\t', result)
         print('repr(e):\t', repr(result))
-
         print('traceback.format_exc():\n%s' % traceback.format_exc())  # 字符串
         traceback.print_exc()  # 执行函数
-        # wb1.save()
-        # wb2.save()
         wb3.save(out_file)
         wb1.close()
         wb2.close()
@@ -297,7 +370,7 @@ def companyToSimple(company):
 # 根据关键获取去重后的字段
 def getSetData(wb,keywordList,headNum):
     global xPositon, yPositon
-    sheet1 = wb.sheets(1)
+    sheet1 = wb.sheets["原始表"]
     info = sheet1.used_range
     nrows = info.last_cell.row
     ncols = info.last_cell.column
@@ -350,6 +423,86 @@ def getKeyRow(sheet,col,key):
         if value == key:
             return i
     return None
+
+def getKeyPos(sheet,keyword,headNum):
+    info = sheet.used_range
+    ncols = info.last_cell.column
+    res = {}
+    for i in range(1, headNum + 1):  # 遍历前两行
+        for y in range(1, ncols + 1):  # 遍历最长列数
+            temp = sheet.range(i, y).value
+            if temp != None:
+                # print(str(i) + "     " + str(y) + "     =     " + temp)
+                if temp == keyword:
+                    print(str(i) + "     " + str(y) + "     =     " + temp)
+                    xPositon = i
+                    yPositon = y
+                    res["xPosition"] = xPositon
+                    res["yPosition"] = yPositon
+
+    return res
+    pass
+
+def getKeyPosPro(sheet,keywordList,headNum):
+    info = sheet.used_range
+    ncols = info.last_cell.column
+    res = {}
+    for key in keywordList:
+        res[key] = {}
+        for i in range(1, headNum + 1):  # 遍历前两行
+            for y in range(1, ncols + 1):  # 遍历最长列数
+                temp = sheet.range(i, y).value
+                if temp != None:
+                    # print(str(i) + "     " + str(y) + "     =     " + temp)
+                    if temp == key:
+                        print(str(i) + "     " + str(y) + "     =     " + temp)
+                        xPositon = i
+                        yPositon = y
+                        res[key]["xPosition"] = xPositon
+                        res[key]["yPosition"] = yPositon
+        pass
+
+
+    return res
+    pass
+
+# 找出新增数据，移除数据，共同数据
+def findJoinData(list1,list2):
+    joinList = []
+    addList = []
+    remList = []
+
+    for i in list1:
+        for j in list2:
+            if i == j:
+                joinList.append(i)
+                print(i,"-------俩表都在，无变化")
+
+    for b in (list1 + list2):
+        if b not in joinList:
+            if b not in list2:
+                remList.append(b)
+                print(b, "-------不在新表，已处置")
+            if b not in list1:
+                print(b, "-------不在旧表，新资产")
+                addList.append(b)
+
+    return addList,remList,joinList
+    pass
+
+# 传入表，表头行数，表最大行数，数据列数，数据  返回dataArr数的行数{RH20200529:1,...}
+def getColValuePos(sheet,headNum,maxRow,nCol,dataArr):
+
+    res = {}
+    for i in range(headNum + 1,maxRow + 1):
+        value = sheet.range(i,nCol).value
+        if value in dataArr:
+           res[value] = i
+
+    return res
+    pass
+
+
 
 # 拿到指定表的说有sheets名字
 
