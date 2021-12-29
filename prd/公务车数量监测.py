@@ -25,11 +25,11 @@ import subprocess
 def start():
     global wb1,wb2,wb3,app,sheet3, xPositon, yPositon
     # 上个月数据
-    pre_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年4月瑞华集团公务车信息汇总表.xlsx'
+    pre_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年10月瑞华集团公务车信息汇总表.xlsx'
     # 这个月数据
-    now_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年5月瑞华集团公务车信息汇总表.xlsx'
+    now_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年11月瑞华集团公务车信息汇总表.xlsx'
     # 输出数据
-    out_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年4月和5月对比.xlsx'
+    out_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年10月和11月对比.xlsx'
     # 上个月汇总表合计一行的关键字标识
     preHuZongHejiKey = "合计"
     # 原始表的表头行数
@@ -65,11 +65,25 @@ def start():
     typeList = [
         "高层配车",
         "工作车",
-        "试驾车",
+        "试乘试驾车",
         "救援车",
         "业务车",
 
     ]
+
+    # 定义只保留的字段
+    delList = [
+        "A车牌号",
+        "使用单位",
+        "品牌",
+        "规格型号",
+        "A车架号",
+        "二级类别",
+        "使用单位"
+    ]
+
+    # 定义不需要删除多余字段的表名列表
+    noDelKeyTabNameList = ["更新车辆","移除车辆","新增车辆","汇总","原始表"]
 
     # 老资产编号列表
     oldDuibiNumArr = []
@@ -287,6 +301,8 @@ def start():
             else:
                 updateSheet.range(i, updateSheetCols + len(jiankongKeyWordArr) + 1).value = strRes
 
+        # 删除多余字段
+
 
         # 获取对比信息
         """
@@ -501,6 +517,44 @@ def getColValuePos(sheet,headNum,maxRow,nCol,dataArr):
 
     return res
     pass
+
+# 删除多余字段
+def delCol(sheet,headNum,dataArr):
+    """
+    1. 获取sheet的列数
+    2. 取表头的值 遍历判断是否在dataArr中，在则删除
+    """
+    sheetInfo = sheet.used_range
+    sheetNrows = sheetInfo.last_cell.row
+    sheetNcols = sheetInfo.last_cell.column
+    sheetName = sheet.name
+    for i in range(1,sheetNcols + 1):
+        value = sheetInfo.range(headNum,i).value
+        if value in dataArr:
+            # 删除列
+            print("删除",sheetName,"表中的",value,"列")
+            sheet.api.Columns(i).Delete()
+            pass
+        pass
+    pass
+
+# 添加样式
+
+# 添加序号列
+def addNumCols(sheet,headNum):
+
+    sheetInfo = sheet.used_range
+    sheetNrows = sheetInfo.last_cell.row
+    sheetNcols = sheetInfo.last_cell.column
+    # 在第一列前插入插入一列
+    sheet.api.Rows(1).Insert()
+    sheet.range(headNum,1).value = "序号"
+    count = 1
+    for i in range(headNum + 1, sheetNrows + 1):
+        sheet.range(i,1).value = count
+        count = count + 1
+    pass
+
 
 
 

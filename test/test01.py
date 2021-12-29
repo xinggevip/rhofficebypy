@@ -29,8 +29,21 @@ def test():
     print(nrows)
     print(ncols)
 
+    # sheet.api.Rows(1).Copy(sheet2.api.Rows(19))
+    # sheet.api.Rows(2).Copy(sheet2.api.Rows(20))
+
+    sheet2 = xls.sheets['汇总']
+    # 获取宽度
+
+    # for i in range(1,12):
+    #     print(sheet2.range(1,i).column_width)
+
+    print(sheet2.range(1,1).color)
+    print(sheet2.range(2,1).color)
+    print(sheet2.range(3,1).color)
 
 
+    xls.save()
     xls.app.quit()
 test()
 

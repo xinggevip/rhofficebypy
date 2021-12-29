@@ -25,15 +25,15 @@ def start():
     global wb1, wb2, danwei
     global xPositon
     global yPositon
-    excel_file = 'C:\\Users\\Administrator\\Desktop\\待导入固定资产\\通知行政录入部门\\资产数据管理3.xlsx'  # 数据源
-    out_file_path = 'C:\\Users\\Administrator\\Desktop\\待导入固定资产\\通知行政录入部门\\处理后\\'         #处理后文件地址
-    keyword = '使用单位'                                                                             #以此关键字划分文件
-    addFileName = '-使用部门为空-需在OA行政资产管理补全'
+    excel_file = 'E:\\01--高星--\\01 工作文档\\待办\\库存数据\\20210511\\库存信息不全查询_2.xls'  # 数据源
+    out_file_path = 'E:\\01--高星--\\01 工作文档\\待办\\库存数据\\20210511\\处理后\\'         #处理后文件地址
+    keyword = '创建人'                                                                             #以此关键字划分文件
+    addFileName = '车辆信息不全-需补全'
     addKeyWord = []
     bgColor = [255, 255, 0]
     font = 'Calibri'
     blod = True
-    headNum = 2
+    headNum = 3
     print('===============开始==================')
     try:
         app = xw.App(visible=False, add_book=False)

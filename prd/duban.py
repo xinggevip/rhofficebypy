@@ -19,7 +19,7 @@ app = xw.App(visible= False, add_book= False)
 # app.display_alerts=False
 # app.screen_updating=False
 
-data_dir = "E:\\01--高星--\\01 工作文档\\03 超30天督办事项\\20210301\\待处理\\"          # 待处理数据问价路径
+data_dir = "E:\\01--高星--\\01 工作文档\\03 超30天督办事项\\20210901\\待处理\\"          # 待处理数据问价路径
 
 """获取文件列表"""
 def getRawFileList(path):
