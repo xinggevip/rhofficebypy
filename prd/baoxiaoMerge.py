@@ -36,8 +36,8 @@ def getRawFileList(path):
 
 def start():
     global wb1, wb2, danwei
-    out_file_path = 'E:\\01--高星--\\06 打印\\标签打印格式\\版本2\\待合并\\标签合并后.xlsx'
-    data_src_path = 'E:\\01--高星--\\06 打印\\标签打印格式\\版本2\\待合并\\'  # 待合并的文件夹
+    out_file_path = 'D:\\office\\各单位表十一\\合成后\\合成后.xlsx'
+    data_src_path = 'D:\\office\\各单位表十一\\核对后表十一\\'  # 待合并的文件夹
 
     open_path = 'E:\\01--高星--\\06 打印\\标签打印格式\\版本2\\待合并\\'
     # out_file_path = 'C:\\Users\\Administrator\\Desktop\\瑞乾超期\\瑞乾超期合并后.xls'

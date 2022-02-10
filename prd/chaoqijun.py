@@ -45,7 +45,7 @@ def start():
     global wb2, wb1
     try:
         # 定义存放处理后数据的目录
-        chulihou_office_path = "F:\\newoffice\\"
+        chulihou_office_path = "F:\\newoffice\\2021\\"
         # 模板所在位置
         muban_file_path = "F:\\每个季度超期平均值\\模板\\超期明细平均值.xlsx"
         # 处理后打开位置

@@ -76,12 +76,11 @@ def detial_list_for_name(list1):
     res = []
     for item in list1:
         str = item.replace('超30天未完结事项需反馈.xls','')
-        str = item.replace('超30天未报销事项查询_需反馈.xlsx','')
+        str = str.replace('超30天未报销事项查询_需反馈.xlsx','')
         res.append(str)
     return res        
         
-def start():
-    path = 'E:\\01--高星--\\01 工作文档\\03 超30天未报销事项\\20211201\\待处理'
+def start(path):
     print(path)
     files, names = getRawFileList(path)
     # print(files)
@@ -92,11 +91,18 @@ def start():
     
     for i in res:
         print(companyToSimple(i))
+        
+    print('=' * 30)    
+    
     
 
 
 
 if __name__ == '__main__':
-    start()
+    path1 = 'E:\\01--高星--\\01 工作文档\\03 超30天督办事项\\20220104\\待处理'
+    path2 = 'E:\\01--高星--\\01 工作文档\\03 超30天未报销事项\\20220104\\待处理'
+    
+    start(path1)
+    start(path2)
 
 

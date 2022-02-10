@@ -60,7 +60,8 @@ def start(excel_file,out_file,huizongTitle):
         '德骏',
         '瑞扬',
         '二手车',
-        '南瑞'
+        '南瑞',
+        '瑞恒'
     ]
     # 车辆类型为了固定顺序而定义
     typeList = [
@@ -343,14 +344,14 @@ def getSetData(wb,keywordList,headNum):
     return resArr
 
 if __name__ == '__main__':
-    excel_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\车辆信息管理10月原始数据.xlsx'  # 数据源
-    out_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年10月瑞华集团公务车信息汇总表.xlsx'
-    huizongTitle1 = "2021年10月瑞华集团公务车信息汇总表"
+    excel_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\车辆信息管理12月原始数据.xlsx'  # 数据源
+    out_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年12月瑞华集团公务车信息汇总表.xlsx'
+    huizongTitle1 = "2021年12月瑞华集团公务车信息汇总表"
     start(excel_file1,out_file1,huizongTitle1)
 
-    excel_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\车辆信息管理11月原始数据.xlsx'  # 数据源
-    out_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年11月瑞华集团公务车信息汇总表.xlsx'
-    huizongTitle1 = "2021年11月瑞华集团公务车信息汇总表"
-    start(excel_file1, out_file1, huizongTitle1)
+    # excel_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\车辆信息管理11月原始数据.xlsx'  # 数据源
+    # out_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年11月瑞华集团公务车信息汇总表.xlsx'
+    # huizongTitle1 = "2021年11月瑞华集团公务车信息汇总表"
+    # start(excel_file1, out_file1, huizongTitle1)
 
 
