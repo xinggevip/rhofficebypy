@@ -25,15 +25,15 @@ def start():
     global wb1, wb2, danwei
     global xPositon
     global yPositon
-    excel_file = 'E:\\01--高星--\\01 工作文档\\待办\\库存数据\\20210511\\库存信息不全查询_2.xls'  # 数据源
-    out_file_path = 'E:\\01--高星--\\01 工作文档\\待办\\库存数据\\20210511\\处理后\\'         #处理后文件地址
-    keyword = '创建人'                                                                             #以此关键字划分文件
-    addFileName = '车辆信息不全-需补全'
+    excel_file = 'C:\\Users\\Administrator\\Desktop\\CAP-HR-03 员工档案表_1 (1) - 副本更新毕业院校.xls'  # 数据源
+    out_file_path = 'C:\\Users\\Administrator\\Desktop\\更新毕业院校\\'         #处理后文件地址
+    keyword = '单位'                                                                             #以此关键字划分文件
+    addFileName = ''
     addKeyWord = []
     bgColor = [255, 255, 0]
     font = 'Calibri'
     blod = True
-    headNum = 3
+    headNum = 2
     print('===============开始==================')
     try:
         app = xw.App(visible=False, add_book=False)
@@ -90,9 +90,9 @@ def start():
             #添加字段和样式
             for x in range(0, len(addKeyWord)):
                 sheet2.range(headNum, ncols + 1 + x).value = addKeyWord[x]
-                sheet2.range(headNum, ncols + 1 + x).color = (bgColor[0], bgColor[1], bgColor[2])
-                sheet2.range(headNum, ncols + 1 + x).api.Font.Bold = blod
-                sheet2.range(headNum, ncols + 1 + x).api.Font.Name = font
+                # sheet2.range(headNum, ncols + 1 + x).color = (bgColor[0], bgColor[1], bgColor[2])
+                # sheet2.range(headNum, ncols + 1 + x).api.Font.Bold = blod
+                # sheet2.range(headNum, ncols + 1 + x).api.Font.Name = font
 
             #设置自适应列宽
             info = sheet2.used_range

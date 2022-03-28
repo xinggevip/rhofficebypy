@@ -177,14 +177,16 @@ def start():
     # 无法生成字段：健康状况
 
     print("3.生成合成字段")
-    data["紧急联系人/关系/电话"] = data["紧急联系人"].astype('str') + "/" + data["联系人关系"].astype('str') + "/" + data["联系人电话"].astype('str').str[0:-2]
+    # data["紧急联系人/关系/电话"] = data["紧急联系人"].astype('str') + "/" + data["联系人关系"].astype('str') + "/" + data["联系人电话"].astype('str').str[0:-2]
 
     data["户口地"] = data["户口省"].astype('str') + data["户口市"].astype('str')
 
     # 遍历家庭表，给主表加一个字段  比较耗时  最后执行
-    data["家庭联系方式"] = ''
+    # data["家庭联系方式"] = ''
 
     data["人员异动"] = "在职"
+
+    data.rename(columns={'离职类型': '异动/离职类型'}, inplace=True)
 
     '''
     更新档案内的数据
@@ -275,17 +277,17 @@ def start():
                 # data[data["人员编号"] == bianhao]["现职级"] = row["职务级别"]
                 # data[data["人员编号"] == bianhao]["手机号码"] = row["手机号码"]
 
-            print(data.loc[index2, :])
+                print(data.loc[index2, :])
         pass
 
     # TODO 去重,多个联系方式会导致多行 新员工入职信息
     # 新员工入职
     if new_ruzhi_path != '':
         # 拼接家庭联系方式和紧急联系方式
-        data6["家庭联系方式"] = data6["家庭成员姓名"].astype('str') + "/" + data6["家庭成员关系"].astype('str') + "/" + data6[
-            "家庭成员联系方式"].astype('str')
-        data6["紧急联系人/关系/电话"] = data6["紧急联系人"].astype('str') + "/" + data6["联系人关系"].astype('str') + "/" + data6[
-            "联系人电话"].astype('str')
+        # data6["家庭联系方式"] = data6["家庭成员姓名"].astype('str') + "/" + data6["家庭成员关系"].astype('str') + "/" + data6[
+        #     "家庭成员联系方式"].astype('str')
+        # data6["紧急联系人/关系/电话"] = data6["紧急联系人"].astype('str') + "/" + data6["联系人关系"].astype('str') + "/" + data6[
+        #     "联系人电话"].astype('str')
         data6["户口地"] = data6["户口省"].astype('str') + data6["户口市"].astype('str')
         data6["人员异动"] = "入职"
         data6["工龄年"] = 0
@@ -294,7 +296,7 @@ def start():
         new_ruzhi_data_need_add = data6.loc[:,
                                   ["单位", "部门", "岗位", "职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
                                    "政治面貌", "婚姻状况", "身份证住址", "现居住地", "户口地", "入职日期", "招聘来源", "人员编号", "年龄",
-                                   "工龄年", "性别", "社保状态", "人员异动", "家庭联系方式", "紧急联系人/关系/电话"]]
+                                   "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系","联系人电话"]]
 
         # 更改列名和档案表保持一致
         new_ruzhi_data_need_add.rename(columns={'单位': '现职单位', '部门': '现职部门', '岗位': '现职岗位', '职级': '现职级'}, inplace=True)
@@ -324,7 +326,7 @@ def start():
         old_ruzhi_data_need_add = data7.loc[:,
                                   ["单位", "部门", "岗位", "职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
                                    "政治面貌", "婚姻状况", "身份证住址", "现居住地", "户口地", "入职日期", "人员编号", "年龄",
-                                   "工龄年", "性别", "社保状态", "人员异动", "家庭联系方式", "紧急联系人/关系/电话", "离职日期"]]
+                                   "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系","联系人电话", "离职日期"]]
 
         # 更改列名和档案表保持一致
         old_ruzhi_data_need_add.rename(columns={'单位': '现职单位', '部门': '现职部门', '岗位': '现职岗位', '职级': '现职级'}, inplace=True)
@@ -334,7 +336,7 @@ def start():
 
         update_lie = ["现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
                       "政治面貌", "婚姻状况", "身份证住址", "现居住地", "户口地", "入职日期", "人员编号", "年龄",
-                      "工龄年", "性别", "社保状态", "人员异动", "家庭联系方式", "紧急联系人/关系/电话", "离职日期"]
+                      "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系","联系人电话", "离职日期"]
 
         for index in old_ruzhi_bianhao:
             print(index)
@@ -347,7 +349,7 @@ def start():
                 data.loc[data_old_index, up_name] = value[up_name][dao_old_index]
 
         print("流转中流程复职员工信息已更新至档案")
-        print(data[data["姓名"] == "陈灵灵"]["工龄月"])
+        # print(data[data["姓名"] == "陈灵灵"]["工龄月"])
 
     # OA开通写入
     if new_open_path != '':
@@ -358,8 +360,8 @@ def start():
             if bianhao not in dang_bianhao_arr:
                 print("人员编号", bianhao, "不存在档案表中，需添加到档案")
                 new_open_need_add_arr = new_open.loc[:,
-                                        ["计划部门", "计划岗位", "职务级别", "姓名", "性别", "手机号码", "身份证号", "人员编号", "入职日期"]]
-                new_open_need_add_arr.rename(columns={'计划部门': '现职部门', '计划岗位': '现职岗位', '职务级别': '现职级'}, inplace=True)
+                                        ["单位","计划部门", "计划岗位", "职务级别", "姓名", "性别", "手机号码", "身份证号", "人员编号", "入职日期"]]
+                new_open_need_add_arr.rename(columns={'单位':'现职单位','计划部门': '现职部门', '计划岗位': '现职岗位', '职务级别': '现职级'}, inplace=True)
                 new_open_need_add_arr["人员异动"] = "入职"
                 new_open_need_add_arr["员工状态"] = "试用期"
                 new_open_need_add_arr["工龄年"] = 0
@@ -427,7 +429,7 @@ def start():
         data["调出/晋升公司"] = ''
         data["调出/晋升部门"] = ''
         data["调出/晋升岗位"] = ''
-        data["异动/离职类型"] = ''
+        # data["异动/离职类型"] = ''
         data["调动原因"] = ''
         data["离职原因"] = ''
 
@@ -546,7 +548,7 @@ def start():
                 data.loc[dang_index, '人员异动'] = "离职"
                 data.loc[dang_index, '调动/离职日期'] = row["实际离职日期"]
                 data.loc[dang_index, "员工状态"] = "离职"
-                data.loc[dang_index, "异动/离职类型"] = "主动离职"
+                data.loc[dang_index, "异动/离职类型"] = row["离职类型"]
                 data.loc[dang_index, "离职原因"] = row["任职性质"]
     # 异常离职
     if yichang_li_path != '':
@@ -557,7 +559,7 @@ def start():
                 data.loc[dang_index, '人员异动'] = "离职"
                 data.loc[dang_index, '调动/离职日期'] = row["离职日期"]
                 data.loc[dang_index, "员工状态"] = "离职"
-                data.loc[dang_index, "异动/离职类型"] = "辞退"
+                data.loc[dang_index, "异动/离职类型"] = row["离职类型"]
                 data.loc[dang_index, "离职原因"] = row["任职性质"]
 
     # 帅选出非离职的和一个月内离职的
@@ -577,19 +579,19 @@ def start():
 
     # print(data)
 
-    for index, row in data.iterrows():
-        bianhao1 = row["$"]
-        for index2, row2 in data2.iterrows():
-            bianhao2 = row2["$"]
-            if bianhao1 == bianhao2:
-                # print(row2["家庭成员联系方式"])
-                # data["家庭联系方式"][index] = data2["家庭成员姓名"].astype('str')[index2] + "/" + data2["家庭成员关系"].astype('str')[index2] + "/" + data2["家庭成员联系方式"].astype('str')[index2]
-                # print(data["家庭联系方式"][index])
-                data.loc[index, "家庭联系方式"] = data2["家庭成员姓名"].astype('str')[index2] + "/" + data2["家庭成员关系"].astype('str')[
-                    index2] + "/" + data2["家庭成员联系方式"].astype('str')[index2]
-                # print(data.loc[index,["家庭联系方式","家庭成员姓名","家庭成员关系","家庭成员联系方式"]])
-                print(data["家庭联系方式"][index])
-                break
+    # for index, row in data.iterrows():
+    #     bianhao1 = row["$"]
+    #     for index2, row2 in data2.iterrows():
+    #         bianhao2 = row2["$"]
+    #         if bianhao1 == bianhao2:
+    #             # print(row2["家庭成员联系方式"])
+    #             # data["家庭联系方式"][index] = data2["家庭成员姓名"].astype('str')[index2] + "/" + data2["家庭成员关系"].astype('str')[index2] + "/" + data2["家庭成员联系方式"].astype('str')[index2]
+    #             # print(data["家庭联系方式"][index])
+    #             data.loc[index, "家庭联系方式"] = data2["家庭成员姓名"].astype('str')[index2] + "/" + data2["家庭成员关系"].astype('str')[
+    #                 index2] + "/" + data2["家庭成员联系方式"].astype('str')[index2]
+    #             # print(data.loc[index,["家庭联系方式","家庭成员姓名","家庭成员关系","家庭成员联系方式"]])
+    #             print(data["家庭联系方式"][index])
+    #             break
 
     data["合同签订记录"] = ''
     data["档案/合同存放地"] = ''
@@ -677,7 +679,7 @@ def start():
             data.loc[index,"是否缴纳五险"] = "是"
 
     data["用工性质"] = "合同"
-    data["档案/合同存放地"] = "否"
+    # data["档案/合同存放地"] = "否"
 
     # 处理毕业院校
     # 去空白，去重保留最后一行
@@ -695,25 +697,35 @@ def start():
     print("信息处理后的档案所有字段======================================")
     print(data.columns.values)
     print(data)
+
+
+    # 删除所有调出的行
+    data.drop(data[data['异动/离职类型'] == "调出"].index, inplace=True)
+
+
     # TODO 如有多个人员编号，进行去重  按照单位分割文件  可以最后分割
 
     # data.dropna(subset=["现职单位"], inplace=True)
     # data['序号'] = range(1, len(data) + 1)
 
     col_list = ["现职单位", "现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
-                "政治面貌", "婚姻状况","有无子女", "家庭联系方式", "身份证住址", "户口地", "现居住地", "紧急联系人/关系/电话",
+                "政治面貌", "婚姻状况","有无子女", "身份证住址", "户口地", "现居住地", "紧急联系人", "联系人关系","联系人电话",
                 "用工性质", "人员异动", "入职日期", "招聘来源", "转正日期", "调动/离职日期", "原调入公司", "原调入部门",
                 "原调入岗位", "调出/晋升公司", "调出/晋升部门", "调出/晋升岗位", "异动/离职类型", "调动原因", "离职原因",
                 "人员编号", "合同签订记录", "档案/合同存放地", "是否购买商业险", "保险机构", "缴纳险种", "保险期限", "是否缴纳五险",
                 "参保时间", "年龄", "工龄年", "性别", "毕业院校"]
-    col_list_out = ["序号","现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
-                "政治面貌", "婚姻状况","有无子女", "家庭联系方式", "身份证住址", "户口地", "现居住地", "紧急联系人/关系/电话",
+    col_list_out = ["序号","现职单位","现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
+                "政治面貌", "婚姻状况","有无子女","身份证住址", "户口地", "现居住地", "紧急联系人", "联系人关系","联系人电话",
                 "用工性质", "人员异动", "入职日期", "招聘来源", "转正日期", "调动/离职日期", "原调入公司", "原调入部门",
                 "原调入岗位", "调出/晋升公司", "调出/晋升部门", "调出/晋升岗位", "异动/离职类型", "调动原因", "离职原因",
                 "人员编号", "合同签订记录", "档案/合同存放地", "是否购买商业险", "保险机构", "缴纳险种", "保险期限", "是否缴纳五险",
                 "参保时间", "年龄", "工龄年", "性别", "毕业院校"]
     data = data[col_list]
 
+    #data.sort_values(na_position='first', inplace=True)  # 空值在前
+    #data.sort_values(by=['现职单位','现职部门'], inplace=True)
+
+    data.to_excel(out_path + "全集团人事月报.xlsx", sheet_name="sheet1", index=False)
 
     listType = data['现职单位'].unique()
     print(listType)

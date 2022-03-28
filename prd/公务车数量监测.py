@@ -25,11 +25,11 @@ import subprocess
 def start():
     global wb1,wb2,wb3,app,sheet3, xPositon, yPositon
     # 上个月数据
-    pre_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年11月瑞华集团公务车信息汇总表.xlsx'
+    pre_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2022年1月瑞华集团公务车信息汇总表.xlsx'
     # 这个月数据
-    now_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年12月瑞华集团公务车信息汇总表.xlsx'
+    now_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2022年2月瑞华集团公务车信息汇总表.xlsx'
     # 输出数据
-    out_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年11月和12月对比.xlsx'
+    out_file = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2022年1月和2022年2月对比.xlsx'
     # 上个月汇总表合计一行的关键字标识
     preHuZongHejiKey = "合计"
     # 原始表的表头行数
@@ -350,7 +350,8 @@ def companyToSimple(company):
         "郑州南瑞汽车配件销售有限公司",
         "河南南泓汽车贸易有限公司",
         "巩义市德嘉汽车销售服务有限公司",
-        "新密市瑞利汽车销售有限公司"
+        "新密市瑞利汽车销售有限公司",
+        "郑州智领瑞华汽车销售服务有限公司"
     ]
 
     # 直接return
@@ -375,6 +376,8 @@ def companyToSimple(company):
             return "德嘉"
         if company == "新密市瑞利汽车销售有限公司":
             return "瑞利"
+        if company == "郑州智领瑞华汽车销售服务有限公司":
+            return "智领瑞华"
     # 有规则return
     matchObj = re.match(r'河南(.*?)汽车', company, re.M | re.I)
 

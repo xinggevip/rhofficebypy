@@ -185,7 +185,7 @@ def start():
             for j in range(0, len(wb2.sheets)):
                 currSheetTitleAll = wb2.sheets[j].name
                 currSheetTitle = (wb2.sheets[j].name)[0:2]
-                # print(currSheetTitle)
+                print('currSheetTitle',currSheetTitle,'mystr',mystr)
                 # print(currSheet.range('A' + str(i + 1)).value)
                 if mystr.find(currSheetTitle) != -1:
                     isFind = True

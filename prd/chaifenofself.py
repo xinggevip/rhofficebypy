@@ -61,7 +61,8 @@ def start(excel_file,out_file,huizongTitle):
         '瑞扬',
         '二手车',
         '南瑞',
-        '瑞恒'
+        '瑞恒',
+        '智领瑞华'
     ]
     # 车辆类型为了固定顺序而定义
     typeList = [
@@ -263,7 +264,8 @@ def companyToSimple(company):
         "郑州南瑞汽车配件销售有限公司",
         "河南南泓汽车贸易有限公司",
         "巩义市德嘉汽车销售服务有限公司",
-        "新密市瑞利汽车销售有限公司"
+        "新密市瑞利汽车销售有限公司",
+        "郑州智领瑞华汽车销售服务有限公司"
     ]
 
     # 直接return
@@ -288,6 +290,8 @@ def companyToSimple(company):
             return "德嘉"
         if company == "新密市瑞利汽车销售有限公司":
             return "瑞利"
+        if company == "郑州智领瑞华汽车销售服务有限公司":
+            return "智领瑞华"
     # 有规则return
     matchObj = re.match(r'河南(.*?)汽车', company, re.M | re.I)
 
@@ -344,9 +348,9 @@ def getSetData(wb,keywordList,headNum):
     return resArr
 
 if __name__ == '__main__':
-    excel_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\车辆信息管理12月原始数据.xlsx'  # 数据源
-    out_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2021年12月瑞华集团公务车信息汇总表.xlsx'
-    huizongTitle1 = "2021年12月瑞华集团公务车信息汇总表"
+    excel_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\车辆信息管理2月原始数据.xlsx'  # 数据源
+    out_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\2022年2月瑞华集团公务车信息汇总表.xlsx'
+    huizongTitle1 = "2022年2月瑞华集团公务车信息汇总表"
     start(excel_file1,out_file1,huizongTitle1)
 
     # excel_file1 = 'E:\\01--高星--\\01 工作文档\\18车辆数量监测\\test\\拆分\\车辆信息管理11月原始数据.xlsx'  # 数据源
