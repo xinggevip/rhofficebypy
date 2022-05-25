@@ -75,7 +75,7 @@ def start():
         # print(data5.columns.values)
 
 
-    except Exception as  result:
+    except Exception as result:
         print("档案表读取失败，程序结束运行")
         print(result)
         return
@@ -230,14 +230,15 @@ def start():
     新员工入职 只导出流转中的，追加到表十一
     然后找出所有入职日期为本月的，更新人员异动 为入职
     '''
-    old_open["复职日期"] = pd.to_datetime(old_open["复职日期"], errors='coerce')
-    old_open['year'] = old_open['复职日期'].dt.year.fillna(0).astype("int")  # 转化提取年 ,
-    # 如果有NaN元素则默认转化float64型，要转换数据类型则需要先填充空值,在做数据类型转换
-    old_open['month'] = old_open['复职日期'].dt.month.fillna(0).astype("int")  # 转化提取月
-    old_open['day'] = old_open['复职日期'].dt.day.fillna(0).astype("int")
 
     # OA恢复
     if old_open_path != '':
+        old_open["复职日期"] = pd.to_datetime(old_open["复职日期"], errors='coerce')
+        old_open['year'] = old_open['复职日期'].dt.year.fillna(0).astype("int")  # 转化提取年 ,
+        # 如果有NaN元素则默认转化float64型，要转换数据类型则需要先填充空值,在做数据类型转换
+        old_open['month'] = old_open['复职日期'].dt.month.fillna(0).astype("int")  # 转化提取月
+        old_open['day'] = old_open['复职日期'].dt.day.fillna(0).astype("int")
+
         # 遍历OA恢复，查看入职日期是否一直，不一致则更新
         for index, row in old_open.iterrows():
             # 获取当前人员编号和入职日期
@@ -296,7 +297,7 @@ def start():
         new_ruzhi_data_need_add = data6.loc[:,
                                   ["单位", "部门", "岗位", "职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
                                    "政治面貌", "婚姻状况", "身份证住址", "现居住地", "户口地", "入职日期", "招聘来源", "人员编号", "年龄",
-                                   "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系","联系人电话"]]
+                                   "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系", "联系人电话"]]
 
         # 更改列名和档案表保持一致
         new_ruzhi_data_need_add.rename(columns={'单位': '现职单位', '部门': '现职部门', '岗位': '现职岗位', '职级': '现职级'}, inplace=True)
@@ -326,7 +327,7 @@ def start():
         old_ruzhi_data_need_add = data7.loc[:,
                                   ["单位", "部门", "岗位", "职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
                                    "政治面貌", "婚姻状况", "身份证住址", "现居住地", "户口地", "入职日期", "人员编号", "年龄",
-                                   "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系","联系人电话", "离职日期"]]
+                                   "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系", "联系人电话", "离职日期"]]
 
         # 更改列名和档案表保持一致
         old_ruzhi_data_need_add.rename(columns={'单位': '现职单位', '部门': '现职部门', '岗位': '现职岗位', '职级': '现职级'}, inplace=True)
@@ -336,7 +337,7 @@ def start():
 
         update_lie = ["现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
                       "政治面貌", "婚姻状况", "身份证住址", "现居住地", "户口地", "入职日期", "人员编号", "年龄",
-                      "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系","联系人电话", "离职日期"]
+                      "工龄年", "性别", "社保状态", "人员异动", "紧急联系人", "联系人关系", "联系人电话", "离职日期"]
 
         for index in old_ruzhi_bianhao:
             print(index)
@@ -360,8 +361,9 @@ def start():
             if bianhao not in dang_bianhao_arr:
                 print("人员编号", bianhao, "不存在档案表中，需添加到档案")
                 new_open_need_add_arr = new_open.loc[:,
-                                        ["单位","计划部门", "计划岗位", "职务级别", "姓名", "性别", "手机号码", "身份证号", "人员编号", "入职日期"]]
-                new_open_need_add_arr.rename(columns={'单位':'现职单位','计划部门': '现职部门', '计划岗位': '现职岗位', '职务级别': '现职级'}, inplace=True)
+                                        ["单位", "计划部门", "计划岗位", "职务级别", "姓名", "性别", "手机号码", "身份证号", "人员编号", "入职日期"]]
+                new_open_need_add_arr.rename(columns={'单位': '现职单位', '计划部门': '现职部门', '计划岗位': '现职岗位', '职务级别': '现职级'},
+                                             inplace=True)
                 new_open_need_add_arr["人员异动"] = "入职"
                 new_open_need_add_arr["员工状态"] = "试用期"
                 new_open_need_add_arr["工龄年"] = 0
@@ -676,7 +678,7 @@ def start():
     for index, row in data.iterrows():
         canbao_status = row["社保状态"]
         if "已参保" == str(canbao_status):
-            data.loc[index,"是否缴纳五险"] = "是"
+            data.loc[index, "是否缴纳五险"] = "是"
 
     data["用工性质"] = "合同"
     # data["档案/合同存放地"] = "否"
@@ -698,10 +700,8 @@ def start():
     print(data.columns.values)
     print(data)
 
-
     # 删除所有调出的行
     data.drop(data[data['异动/离职类型'] == "调出"].index, inplace=True)
-
 
     # TODO 如有多个人员编号，进行去重  按照单位分割文件  可以最后分割
 
@@ -709,21 +709,21 @@ def start():
     # data['序号'] = range(1, len(data) + 1)
 
     col_list = ["现职单位", "现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
-                "政治面貌", "婚姻状况","有无子女", "身份证住址", "户口地", "现居住地", "紧急联系人", "联系人关系","联系人电话",
+                "政治面貌", "婚姻状况", "有无子女", "身份证住址", "户口地", "现居住地", "紧急联系人", "联系人关系", "联系人电话",
                 "用工性质", "人员异动", "入职日期", "招聘来源", "转正日期", "调动/离职日期", "原调入公司", "原调入部门",
                 "原调入岗位", "调出/晋升公司", "调出/晋升部门", "调出/晋升岗位", "异动/离职类型", "调动原因", "离职原因",
                 "人员编号", "合同签订记录", "档案/合同存放地", "是否购买商业险", "保险机构", "缴纳险种", "保险期限", "是否缴纳五险",
                 "参保时间", "年龄", "工龄年", "性别", "毕业院校"]
-    col_list_out = ["序号","现职单位","现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
-                "政治面貌", "婚姻状况","有无子女","身份证住址", "户口地", "现居住地", "紧急联系人", "联系人关系","联系人电话",
-                "用工性质", "人员异动", "入职日期", "招聘来源", "转正日期", "调动/离职日期", "原调入公司", "原调入部门",
-                "原调入岗位", "调出/晋升公司", "调出/晋升部门", "调出/晋升岗位", "异动/离职类型", "调动原因", "离职原因",
-                "人员编号", "合同签订记录", "档案/合同存放地", "是否购买商业险", "保险机构", "缴纳险种", "保险期限", "是否缴纳五险",
-                "参保时间", "年龄", "工龄年", "性别", "毕业院校"]
+    col_list_out = ["序号", "现职单位", "现职部门", "现职岗位", "现职级", "员工状态", "姓名", "出生日期", "民族", "学历", "身份证号", "手机号码",
+                    "政治面貌", "婚姻状况", "有无子女", "身份证住址", "户口地", "现居住地", "紧急联系人", "联系人关系", "联系人电话",
+                    "用工性质", "人员异动", "入职日期", "招聘来源", "转正日期", "调动/离职日期", "原调入公司", "原调入部门",
+                    "原调入岗位", "调出/晋升公司", "调出/晋升部门", "调出/晋升岗位", "异动/离职类型", "调动原因", "离职原因",
+                    "人员编号", "合同签订记录", "档案/合同存放地", "是否购买商业险", "保险机构", "缴纳险种", "保险期限", "是否缴纳五险",
+                    "参保时间", "年龄", "工龄年", "性别", "毕业院校"]
     data = data[col_list]
 
-    #data.sort_values(na_position='first', inplace=True)  # 空值在前
-    #data.sort_values(by=['现职单位','现职部门'], inplace=True)
+    # data.sort_values(na_position='first', inplace=True)  # 空值在前
+    # data.sort_values(by=['现职单位','现职部门'], inplace=True)
 
     data.to_excel(out_path + "全集团人事月报.xlsx", sheet_name="sheet1", index=False)
 
@@ -740,7 +740,7 @@ def start():
         table.drop_duplicates(subset=["人员编号"], keep='first', inplace=True)
         table['序号'] = range(1, len(table) + 1)
         table = table[col_list_out]
-        print("sheet == ", sheet,type(sheet))
+        print("sheet == ", sheet, type(sheet))
         print("打印table")
         print(table)
         # 将table写入到指定文件夹
